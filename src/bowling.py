@@ -26,12 +26,12 @@ class Bowling:
 
     @staticmethod
     def strike(game, throw):
-        multi_strike = 1
+        multi_strike = 0
         first = 1
         second = 2
         first_sum = game[throw-1+first]
         second_sum = game[throw-1+second]
-        while second_sum == 'X':
+        while first_sum == 'X':
             if multi_strike != 3:
                 multi_strike += 1
                 first_sum = game[throw+first]
@@ -48,7 +48,14 @@ class Bowling:
                 return 30
         if first_sum in alert:
             # solo puede ser '-' (valor=0) o 'X' (acumulado ya en multi_strike)
-            first_sum = 0
+            if second_sum not in alert:
+                first_sum = second_sum
+            if second_sum in alert:
+                first_sum = Bowling.special_sign(second_sum)
+        else:
+            if multi_strike > 1:
+                return (10*multi_strike)+int(first_sum)
+
         if second_sum in alert:
             if second_sum == '/':
                 first_sum = 0
@@ -167,16 +174,3 @@ class Bowling:
                 sum += special_sum
 
         return sum
-
-
-assert Bowling.score("11111111111111111111") == 20
-assert Bowling.score("12345123451234512345") == 60
-assert Bowling.score("9-9-9-9-9-9-9-9-9-9-") == 90
-assert Bowling.score("5/5/5/5/5/5/5/5/5/5/5") == 150
-assert Bowling.score("XXXXXXXXXXXX") == 300
-assert Bowling.score("XXX9-9-9-9-9-9-9-") == 141
-assert Bowling.score("8-7-539/9/X8-513/9-") == 122
-assert Bowling.score("8/9-44729-XX8-359/7") == 133
-assert Bowling.score("-/-/-/-/-/-/-/-/-/-/-") == 100
-assert Bowling.score("X5/X5/XX5/--5/X5/") == 175
-assert Bowling.score("8/549-XX5/53639/9/X") == 149
