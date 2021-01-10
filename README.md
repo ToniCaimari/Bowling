@@ -3,6 +3,7 @@
 ## Colaboraciones y fuentes
 
 Este Kata se ha podido llevar a cabo gracias al trabajo en equipo y la ayuda de compañeros de clase con los que trabajé:
+
 -Joan
 
 -Berta
