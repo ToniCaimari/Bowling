@@ -4,7 +4,7 @@ class Game_Score:
         self.scorecard = list(scorecard)
         self.points = 0
         self.alert = 0
-        self.contador_tiradas = 0
+        self.throw_count = 0
 
     @staticmethod
     def values(element):
@@ -18,40 +18,39 @@ class Game_Score:
             return int(element)
 
     def strike_score(self):
-        suma = 0
-        first = Game_Score.values(self.scorecard[self.contador_tiradas+1])
-        second = Game_Score.values(self.scorecard[self.contador_tiradas+2])
-        if self.scorecard[self.contador_tiradas+2] == '/':
+        sum_count = 0
+        first = Game_Score.values(self.scorecard[self.throw_count+1])
+        second = Game_Score.values(self.scorecard[self.throw_count+2])
+        if self.scorecard[self.throw_count+2] == '/':
             first = 0
-        suma += 10 + first + second
-        return suma
+        sum_count += 10 + first + second
+        return sum_count
 
     def spare_score(self):
-        suma = 0
-        previous = Game_Score.values(self.scorecard[self.contador_tiradas-1])
-        subsequent = Game_Score.values(self.scorecard[self.contador_tiradas+1])
-        suma += 10 - previous + subsequent
-
-        return suma
+        sum_count = 0
+        previous = Game_Score.values(self.scorecard[self.throw_count-1])
+        subsequent = Game_Score.values(self.scorecard[self.throw_count+1])
+        sum_count += 10 - previous + subsequent
+        return sum_count
 
     def tenth(self):
-        suma = 0
-        last = self.scorecard[self.contador_tiradas:]
+        sum_count = 0
+        last = self.scorecard[self.throw_count:]
+        position = 0
         for i in last:
             if i.isdigit():
-                suma += int(i)
+                sum_count += int(i)
+                position += 1
             elif i == 'X':
-                suma += 10
+                sum_count += 10
+                position += 1
             elif i == '/':
-                if i == self.scorecard[self.contador_tiradas+1]:
-                    suma += 10 - Game_Score.values(
-                        self.scorecard[self.contador_tiradas])
-                else:
-                    suma += 10 - Game_Score.values(
-                        self.scorecard[self.contador_tiradas+1])
+                sum_count += 10 - Game_Score.values(
+                    last[position-1])
             elif i == '-':
+                position += 1
                 pass
-        return suma
+        return sum_count
 
     def final_score(self):
         strike = 'X'
@@ -61,21 +60,20 @@ class Game_Score:
             if self.alert != 18:
                 if i.isdigit():
                     self.points += Game_Score.values(i)
-                    self.contador_tiradas += 1
+                    self.throw_count += 1
                     self.alert += 1
                 elif i == strike:
                     self.points += Game_Score.strike_score(self)
-                    self.contador_tiradas += 1
+                    self.throw_count += 1
                     self.alert += 2
                 elif i == spare:
                     self.points += Game_Score.spare_score(self)
-                    self.contador_tiradas += 1
+                    self.throw_count += 1
                     self.alert += 1
                 elif i == empty:
-                    self.contador_tiradas += 1
+                    self.throw_count += 1
                     self.alert += 1
             else:
                 self.points += Game_Score.tenth(self)
                 break
-
         return self.points
