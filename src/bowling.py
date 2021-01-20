@@ -47,8 +47,7 @@ class Bowling:
                     return 30
             if multi_strike == 3:
                 return 30
-        if first_sum in alert:
-            # solo puede ser '-' (valor=0) o 'X' (acumulado ya en multi_strike)
+        if first_sum in alert: 
             if second_sum not in alert:
                 first_sum = second_sum
             if second_sum in alert:
