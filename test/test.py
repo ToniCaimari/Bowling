@@ -1,4 +1,4 @@
-from src.bowling import *
+from src.bowling import Bowling
 
 
 def test_special_sign():
