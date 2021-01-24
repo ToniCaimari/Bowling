@@ -7,7 +7,6 @@ class Game_Score:
         self.throw_count = 0  # localizador de cada lanzamiento
         self.strike = 'X'
         self.spare = '/'
-        self.empty = '-'
 
     @staticmethod
     def values(element):  # siempre que queramos revisar el valor de un elemento llamaremos a esta función para evitar revisiones continuas
@@ -49,16 +48,12 @@ class Game_Score:
         for i in last:
             if i.isdigit():
                 sum_count += int(i)
-                position += 1
             elif i == 'X':
                 sum_count += 10
-                position += 1
             elif i == '/':
                 sum_count += 10 - Game_Score.values(
                     last[position-1])  # si encontramos un spare tomaremos en cuenta la posición relativa a la variable 'last' ara localizar el valor a restar a los 10 que sumamos por defecto
-            elif i == '-':
-                position += 1
-                pass
+            position += 1
         return sum_count
 
     def final_score(self):
@@ -66,19 +61,13 @@ class Game_Score:
             if self.alert != 18:  # confirmamos si estamos en el rango del último turno
                 if i.isdigit():
                     self.points += Game_Score.values(i)
-                    self.throw_count += 1
-                    self.alert += 1
                 elif i == self.strike:
                     self.points += Game_Score.strike_score(self)
-                    self.throw_count += 1
-                    self.alert += 2
+                    self.alert += 1
                 elif i == self.spare:
                     self.points += Game_Score.spare_score(self)
-                    self.throw_count += 1
-                    self.alert += 1
-                elif i == self.empty:
-                    self.throw_count += 1
-                    self.alert += 1
+                self.throw_count += 1
+                self.alert += 1
             else:
                 self.points += Game_Score.tenth(self)
                 break
